@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural de Mensagens</title>
+</head>
+<body>
+    <h1>Bem-vindo, {{ username }}!</h1>
+
+    <!-- Botão de logout -->
+    <form action="/logout" method="get">
+        <input type="submit" value="Logout">
+    </form>
+
+    <!-- Formulário para postar mensagem -->
+    <form action="/post" method="post">
+        <textarea name="content" placeholder="Digite sua mensagem"></textarea><br>
+        <input type="submit" value="Postar">
+    </form>
+
+    <!-- Lista de postagens -->
+    <ul>
+        {% for post in posts %}
+            <li>
+                <strong>{{ post[2] }}</strong> disse: {{ post[1] }}
+                {% if username == 'admin' or post[2] == username %}
+                    <form action="/delete/{{ post[0] }}" method="post">
+                        <input type="submit" value="Apagar">
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Mensagens flash -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
