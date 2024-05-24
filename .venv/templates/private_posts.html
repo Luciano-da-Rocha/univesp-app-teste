@@ -4,20 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensagens Privadas</title>
+    <!-- Materialize CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Mensagens Privadas</h1>
-    {% if private_messages %}
-        {% for message in private_messages %}
-            <div>
-                <p>{{ message[0] }}</p>
-                <small>De: {{ message[1] }}</small>
+    <nav class="red">
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Mensagens Privadas</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="{{ url_for('index') }}">Voltar ao Mural</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1 class="center-align">Mensagens Privadas</h1>
+            <div class="row">
+                {% if private_messages %}
+                {% for message in private_messages %}
+                <div class="col s12">
+                    <div class="card red">
+                        <div class="card-content white-text">
+                            <p>{{ message[0] }}</p>
+                            <span class="card-title">De: {{ message[1] }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="center-align">Você não tem mensagens privadas.</p>
+                {% endif %}
             </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>Você não tem mensagens privadas.</p>
-    {% endif %}
-    <a href="{{ url_for('index') }}">Voltar ao mural</a>
+        </div>
+    </main>
+
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        M.AutoInit(); // Inicializar componentes Materialize
+    </script>
 </body>
 </html>

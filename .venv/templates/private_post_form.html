@@ -1,23 +1,52 @@
-<!-- private_post_form.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar Mensagem Privada</title>
+    <!-- Materialize CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        main {
+            flex: 1 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Enviar Mensagem Privada</h1>
-    <form action="/post_private" method="POST">
-        <label for="content">Conteúdo da Mensagem:</label><br>
-        <textarea name="content" id="content" placeholder="Digite o conteúdo da mensagem" required></textarea><br>
-        <label for="recipient">Destinatário:</label><br>
-        <select name="recipient" id="recipient" required>
-            {% for user in users %}
-                <option value="{{ user }}">{{ user }}</option>
-            {% endfor %}
-        </select><br>
-        <input type="submit" value="Enviar Mensagem">
-    </form>
+    <main>
+        <div class="container">
+            <h1 class="center-align">Enviar Mensagem Privada</h1>
+            <form action="/post_private" method="POST">
+                <div class="input-field">
+                    <textarea id="content" class="materialize-textarea" name="content"></textarea>
+                    <label for="content">Conteúdo da Mensagem</label>
+                </div>
+                <div class="input-field">
+                    <select name="recipient">
+                        <option value="" disabled selected>Escolha um destinatário</option>
+                        {% for user in users %}
+                            <option value="{{ user }}">{{ user }}</option>
+                        {% endfor %}
+                    </select>
+                    <label>Destinatário</label>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Enviar Mensagem
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        M.AutoInit(); // Inicializar componentes Materialize
+    </script>
 </body>
 </html>
