@@ -1,0 +1,23 @@
+<!-- private_post_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Mensagem Privada</title>
+</head>
+<body>
+    <h1>Enviar Mensagem Privada</h1>
+    <form action="/post_private" method="POST">
+        <label for="content">Conteúdo da Mensagem:</label><br>
+        <textarea name="content" id="content" placeholder="Digite o conteúdo da mensagem" required></textarea><br>
+        <label for="recipient">Destinatário:</label><br>
+        <select name="recipient" id="recipient" required>
+            {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Enviar Mensagem">
+    </form>
+</body>
+</html>

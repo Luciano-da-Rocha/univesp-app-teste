@@ -1,47 +1,33 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mural de Mensagens</title>
+    <title>Mural de Postagens</title>
 </head>
 <body>
     <h1>Bem-vindo, {{ username }}!</h1>
-
-    <!-- Botão de logout -->
-    <form action="/logout" method="get">
-        <input type="submit" value="Logout">
-    </form>
-
-    <!-- Formulário para postar mensagem -->
-    <form action="/post" method="post">
-        <textarea name="content" placeholder="Digite sua mensagem"></textarea><br>
+    <form action="/post" method="POST">
+        <textarea name="content" placeholder="Digite sua postagem aqui"></textarea><br>
         <input type="submit" value="Postar">
     </form>
-
-    <!-- Lista de postagens -->
-    <ul>
-        {% for post in posts %}
-            <li>
-                <strong>{{ post[2] }}</strong> disse: {{ post[1] }}
-                {% if username == 'admin' or post[2] == username %}
-                    <form action="/delete/{{ post[0] }}" method="post">
-                        <input type="submit" value="Apagar">
-                    </form>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-
-    <!-- Mensagens flash -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    {% for post in posts %}
+        <div>
+            <p>{{ post[2] }}</p>
+            <small>Por: {{ post[1] }}</small>
+            {% if post[1] == username or is_admin %}
+                <form action="/delete/{{ post[0] }}" method="POST">
+                    <button type="submit">Apagar</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% if is_admin %}
+        <a href="{{ url_for('private_post_form') }}">Enviar mensagem privada</a>
+    {% endif %}
+    <form action="/logout" method="GET">
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>
