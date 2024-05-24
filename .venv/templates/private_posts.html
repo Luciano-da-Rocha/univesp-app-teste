@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagens Privadas</title>
+</head>
+<body>
+    <h1>Mensagens Privadas</h1>
+    {% if private_messages %}
+        {% for message in private_messages %}
+            <div>
+                <p>{{ message[0] }}</p>
+                <small>De: {{ message[1] }}</small>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Você não tem mensagens privadas.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}">Voltar ao mural</a>
+</body>
+</html>

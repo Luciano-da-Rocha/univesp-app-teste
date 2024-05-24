@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-import logging
 
 app = Flask(__name__)
-
-
 app.secret_key = 'your_secret_key'
 
 # Função para conectar ao banco de dados SQLite
@@ -20,11 +17,11 @@ def index():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM posts ORDER BY id DESC")
         posts = cursor.fetchall()
-        
+
         # Verifica se o usuário é um administrador
         cursor.execute("SELECT is_admin FROM users WHERE username = ?", (session['username'],))
         is_admin = cursor.fetchone()[0]
-        
+
         db.close()
         return render_template('index.html', username=session['username'], posts=posts, is_admin=is_admin)
     return redirect(url_for('login'))
@@ -44,21 +41,20 @@ def post():
     return redirect(url_for('index'))
 
 # Rota para apagar uma postagem
-# Rota para apagar uma postagem
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
     if 'username' in session:
         db = connect_db()
         cursor = db.cursor()
-        
+
         # Verifica se o usuário é um administrador
         cursor.execute("SELECT is_admin FROM users WHERE username = ?", (session['username'],))
         is_admin = cursor.fetchone()[0]
-        
+
         # Obtém o autor da postagem
         cursor.execute("SELECT author FROM posts WHERE id = ?", (post_id,))
         post_author = cursor.fetchone()
-        
+
         # Verifica se o usuário é um administrador ou se é o autor da postagem
         if is_admin or (post_author and post_author[0] == session['username']):
             cursor.execute("DELETE FROM posts WHERE id = ?", (post_id,))
@@ -145,8 +141,6 @@ def private_post_form():
                 return redirect(url_for('index'))
     return redirect(url_for('login'))
 
-
-
 # Rota para processar o envio da mensagem privada
 @app.route('/post_private', methods=['POST'])
 def post_private():
@@ -171,6 +165,21 @@ def post_private():
 
         flash('Mensagem privada enviada com sucesso para {}!'.format(recipient), 'success')
         return redirect(url_for('index'))
+    return redirect(url_for('login'))
+
+# Rota para exibir mensagens privadas
+@app.route('/private_posts')
+def private_posts():
+    if 'username' in session:
+        db = connect_db()
+        cursor = db.cursor()
+
+        # Obtém as mensagens privadas destinadas ao usuário logado
+        cursor.execute("SELECT content, author FROM private_posts WHERE recipient = ?", (session['username'],))
+        private_messages = cursor.fetchall()
+
+        db.close()
+        return render_template('private_posts.html', private_messages=private_messages)
     return redirect(url_for('login'))
 
 
